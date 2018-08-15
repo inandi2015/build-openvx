@@ -1,15 +1,18 @@
 #!/usr/bin/env bash
-#title           :install-openvx:.sh
-#description     :This script installs and configures openVX for the Odroid XU4.
-#author		 :Taha Azzaoui <tazzaoui@cs.uml.edu>
-#date            :08.14.2018
-#version         :0    
-#usage		 :bash install-openvx.sh
+#title          :install-openvx:.sh
+#description    :This script installs and configures openVX for the Odroid XU4.
+#author         :Taha Azzaoui <tazzaoui@cs.uml.edu>
+#date           :08.14.2018
+#version        :0    
+#usage          :bash install-openvx.sh
 #=================================================================================
 
 
-# remove the old sample dir
+# Remove the old sample dir
 rm -rf openvx_sample
+
+# Get the source (version 1.2)
+wget https://www.khronos.org/registry/OpenVX/sample/openvx_sample_1.2.tar.bz2
 
 # Unzip it
 tar -xvf openvx_sample_1.2.tar.bz2
