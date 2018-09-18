@@ -7,12 +7,13 @@
 #include <VX/vx_lib_debug.h>
 #include <VX/vx_helper.h>
 
+uint64_t or1k_getCycles();
 
 int main(int argc, char *argv[])
 {
     vx_status status = VX_SUCCESS;
-    vx_uint32 width = 3200; //320;
-    vx_uint32 height = 2400; //240;
+    vx_uint32 width = 320;
+    vx_uint32 height = 240;
     vx_uint32 th = 40;
     vx_uint32 i;
 
@@ -25,9 +26,9 @@ int main(int argc, char *argv[])
         // Graph init
         vx_graph graph = vxCreateGraph(context);        
         
-        vx_uint32 winSize = 320; //32
+        vx_uint32 winSize = 32;
         vx_float32 epsilon = 0.01;
-        vx_uint32 num_iterations = 100; //10
+        vx_uint32 num_iterations = 10;
         vx_bool use_initial_estimate = vx_true_e;
         vx_enum criteria = VX_TERM_CRITERIA_BOTH;    // lk params
 
