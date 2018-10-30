@@ -3,18 +3,19 @@
 #description    :This script installs and configures openVX for the Odroid XU4.
 #author         :Taha Azzaoui <tazzaoui@cs.uml.edu>
 #date           :08.14.2018
-#version        :0    
+#version        :1    
 #usage          :bash install-openvx.sh
 #=================================================================================
 
-
 # Remove the old sample dir
-rm -rf openvx_sample
+rm -rf openvx_sample*
 
+echo "Downloading sources..."
 # Get the source (version 1.2)
 wget https://www.khronos.org/registry/OpenVX/sample/openvx_sample_1.2.tar.bz2
 
 # Unzip it
+echo "Extracting sources...."
 tar -xvf openvx_sample_1.2.tar.bz2
 cd openvx_sample
 
@@ -22,23 +23,25 @@ cd openvx_sample
 grep -rl '-m64' ./ | xargs sed -i 's/-m64/ /g'
 grep -rl '-m32' ./ | xargs sed -i 's/-m32/ /g'
 
-# Specify opencl paths
-export VX_OPENCL_INCLUDE_PATH=/usr/share/mali/headers/CL
-export VX_OPENCL_LIB_PATH=/usr/lib/arm-linux-gnueabihf/mali-egl/libOpenCL.so
 
-# Build with tiling, openmp, and opencl support
-python Build.py --os=Linux --tiling --openmp --opencl --rebuild=True --c=gcc --cpp=g++
+echo "Building OpenVX 1.2 with tiling and openmp in debug mode..." 
 
-# Configure linker search paths
-echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/install/Linux/x64/Release/bin" >> /home/odroid/.bashrc
-sudo echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/install/Linux/x64/Release/bin" >> /root/.bashrc
-sudo ln -s /home/odroid/Research2/openvx_sample/install/Linux/x64/Release/bin/*.so /usr/lib
-sudo ln -s /home/odroid/Research2/openvx_sample/install/Linux/x64/Release/bin/*.a /usr/lib
+# Build with tiling, openmp, and debugging 
+python Build.py --os=Linux --tiling --openmp --conf=Debug --rebuild=True --c=gcc --cpp=g++
 
-# Copy the headers to System's default include path
-sudo rm -r /usr/include/VX
-sudo cp -r $(pwd)/install/Linux/x64/Release/include/VX /usr/include/VX
+echo "Finished building."
+echo "Updating default linker & compiler search paths in $HOME/.bashrc"
 
-# To test that this worked..
-#cd raw
-#../install/Linux/x64/Release/bin/vx_test
+# Update default linker & compiler search paths
+echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/install/Linux/x64/Debug/bin" >> $HOME/.bashrc
+echo "export PATH=$PATH:$(pwd)/install/Linux/x64/Debug/include" >> $HOME/.bashrc
+echo "export LDFLAGS=\"-L$(pwd)/install/Linux/x64/Debug/bin\"" >> $HOME/.bashrc 
+echo "export CFLAGS=\"-I$(pwd)/install/Linux/x64/Debug/include\"" >> $HOME/.bashrc 
+
+# Update changes
+source $HOME/.bashrc
+
+echo "Compiling Example Kernels..."
+cd ../examples
+make
+echo "Successfully built examples in $(pwd)/examples"

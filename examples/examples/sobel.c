@@ -6,6 +6,8 @@
 #include <VX/vx.h>
 #include <VX/vx_helper.h>
 #include <VX/vx_lib_debug.h>
+#include <VX/vx_compatibility.h>
+#include <VX/vx_types.h>
 
 int main(int argc, char *argv[]) {
   vx_status status = VX_SUCCESS;
