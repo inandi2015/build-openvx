@@ -2,7 +2,7 @@ Build OpenVX
 
 Description:
 This script builds OpenVX and installs example kernels.
-Note: the script works on generic machines and does not require root access
+Note: the script does not require root access
 
 Author:
 Taha Azzaoui <tazzaoui@cs.uml.edu>
